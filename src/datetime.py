@@ -7,8 +7,8 @@ import pandas as pd
 
 @dataclass
 class DateColumn:
-  col_name: str
-  serie: pd.Series
+  col_name: str = None
+  serie: pd.Series = None
 
   def get_name(self):
     """
@@ -21,13 +21,13 @@ class DateColumn:
     """
     Return number of unique values for selected column
     """
-    return self.serie.unique().to_list().len()
+    return self.serie.dropna().unique().size
 
   def get_missing(self):
     """
     Return number of missing values for selected column
     """
-    return self.serie.isna().count_nonzero()
+    return self.serie.isna().sum()
 
   def get_weekend(self):
     """
