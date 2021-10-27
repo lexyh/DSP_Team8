@@ -1,3 +1,4 @@
+
 # To be filled by students
 import streamlit as st
 from dataclasses import dataclass
@@ -13,19 +14,20 @@ class DateColumn:
     """
     Return name of selected column
     """
-    return None
+    
+    return self.col_name
 
   def get_unique(self):
     """
     Return number of unique values for selected column
     """
-    return None
+    return self.serie.unique().to_list().len()
 
   def get_missing(self):
     """
     Return number of missing values for selected column
     """
-    return None
+    return self.serie.isna().count_nonzero()
 
   def get_weekend(self):
     """
