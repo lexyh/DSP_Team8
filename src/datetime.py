@@ -1,6 +1,4 @@
 # To be filled by students
-Anna Testing
-
 import streamlit as st
 from dataclasses import dataclass
 import pandas as pd
