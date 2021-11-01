@@ -18,10 +18,21 @@ if uploaded_file is not None:
     
     # display overall Dataset information
     st.title("1. Overall Information")
-    st.write(df)
+    st.write(ds.df)
     st.write("Name of Table: ", uploaded_file.name)
-    rows = da.get_n_rows()
-    st.write("Number of Rows: " +rows)
+    rows = ds.get_n_rows()
+    cols = ds.get_n_cols()
+    
+    st.write("Number of Rows: " + rows)
+    st.write("Number of Columns: " + cols) 
+    
+    number = st.slider('Select the numbers of rows to be displayed',0,int(rows),5)
+    st.write("Top Rows of Table")
+    st.dataframe(ds.get_head(number))
+    st.write("Bottom Rows of Table")
+    st.dataframe(ds.get_tail(number))
+    st.write("Random Sample Rows of Table")
+    st.dataframe(ds.get_sample(number))
     ### fill in other display information with data.py functions ###
     
     # get a dictionary of column data types
