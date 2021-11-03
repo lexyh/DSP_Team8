@@ -1,0 +1,7 @@
+services:
+    streamlitapp:
+        build: .
+        volumes:
+            - .:/streamlit_app
+        ports:
+            - "8501:8501"
