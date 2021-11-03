@@ -47,7 +47,7 @@ if uploaded_file is not None:
         if dtype == "int64" or dtype == "float64":
             # initialise NumericColumn object
             nc = nm.NumericColumn()
-            nc.name = column
+            nc.col_name = column
             nc.serie = ds.df[column]
             ### fill in other display information with numeric.py functions ###
             
@@ -55,14 +55,14 @@ if uploaded_file is not None:
         elif dtype == "object":
             # initialise TextColumn object
             tc = tx.TextColumn()
-            tc.name = column
+            tc.col_name = column
             tc.serie = ds.df[column]
             ### fill in other display information with text.py functions ###
             
         elif dtype == "datetime64":
             # initialise DateColumn object
             dc = dx.DateColumn()
-            dc.name = column
+            dc.col_name = column
             dc.serie = ds.df[column]
             ### fill in other display information with datetime.py functions ###
             dc.get_barchart()
