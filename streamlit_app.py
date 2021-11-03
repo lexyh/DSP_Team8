@@ -59,7 +59,7 @@ if uploaded_file is not None:
             ### fill in other display information with numeric.py functions ###
             
         # for text columns
-        elif dtype == "object": 
+        elif dtype == "object" or dtype == "boolean": 
             # update counter for text columns 
             t = t+1
             
