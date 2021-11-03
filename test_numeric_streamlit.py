@@ -18,5 +18,5 @@ df = pd.read_csv(csv_path)
 
 st.title("Numeric Test")
 
-py.bar_chart(dc.get_histogram())
+px.histogram(dc.get_histogram())
 st.table(dc.get_frequent())

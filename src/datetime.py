@@ -80,3 +80,4 @@ class DateColumn:
     Return the Pandas dataframe containing the occurrences and percentage of the top 20 most frequent values
     """
     return None
+
