@@ -8,3 +8,5 @@ EXPOSE 8501
 CMD ["streamlit","run","app/streamlit_app.py"]
 
 CMD ["streamlit","run","test_numeric_streamlit.py"]
+
+CMD ["streamlit","run","numeric.py"]

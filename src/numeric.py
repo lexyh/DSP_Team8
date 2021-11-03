@@ -1,16 +1,13 @@
-# To be filled by students
-
 import streamlit as st
 from dataclasses import dataclass
 import pandas as pd
 
-
 @dataclass
 class NumericColumn:
   data = pd.read_csv('01-01-2021.csv')
-  col_name: data['Lat']
-  serie: pd.Series(col_name)
- 
+  col_name = data['Lat']
+  serie = pd.Series(col_name)
+
   def get_name(self):
     """
     Return name of selected column
