@@ -20,7 +20,7 @@ class TestNumeric(unittest.TestCase):
         self.assertEqual(dc1.get_max(),1)
         self.assertEqual(dc1.get_median(),1)
         ### test on covid-19 sample csv ###
-        csv_path = "01-01-2021_test.csv"
+        csv_path = "01-01-2021.csv"
         if csv_path:
             # read csv
             df = pd.read_csv(csv_path)

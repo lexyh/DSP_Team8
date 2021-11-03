@@ -1,6 +1,8 @@
 import streamlit as st
 from dataclasses import dataclass
 import pandas as pd
+import matplotlib as mp
+import plotly.express as px
 
 @dataclass
 class NumericColumn:
@@ -30,52 +32,52 @@ class NumericColumn:
     """
     Return number of occurrence of 0 value for selected column
     """
-    return ((self.series==0).sum())
+    return ((self.serie==0).sum())
 
   def get_negatives(self):
     """
     Return number of negative values for selected column
     """
-    return ((self.series>=0).sum())
+    return ((self.serie>=0).sum())
 
   def get_mean(self):
     """
     Return the average value for selected column
     """
-    return self.series.mean()
+    return self.serie.mean()
 
   def get_std(self):
     """
     Return the standard deviation value for selected column
     """
-    return self.series.std()
+    return self.serie.std()
   
   def get_min(self):
     """
     Return the minimum value for selected column
     """
-    return self.series.min()
+    return self.serie.min()
 
   def get_max(self):
     """
     Return the maximum value for selected column
     """
-    return self.series.max()
+    return self.serie.max()
 
   def get_median(self):
     """
     Return the median value for selected column
     """
-    return self.series.median()
+    return self.serie.median()
 
   def get_histogram(self):
     """
     Return the generated histogram for selected column
     """
-    return self.series.hist()
+    return px.histogram(self.serie, x = 'title')
 
   def get_frequent(self):
     """
     Return the Pandas dataframe containing the occurrences and percentage of the top 20 most frequent values
     """
-    return self.series.value_counts().nlargets(20)
+    return self.serie.value_counts().nlargest(20)
