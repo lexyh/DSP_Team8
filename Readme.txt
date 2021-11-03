@@ -4,10 +4,9 @@
 
 Hayden Puckeridge
 Anna
-Suellen
+Suellen Fletcher
 Alexis Henderson
-- Student ID: 11111111
-- Email: student@student.uts.edu.au
+
 
 ## Description
 This app is built to allow a user to point to a data file , load that file and automate some basic data exploration tasks:
