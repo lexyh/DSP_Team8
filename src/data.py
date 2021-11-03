@@ -33,13 +33,16 @@ class Dataset():
     """
       Return list column names of loaded dataset
     """
-    return None
+    
+    return df.columns.tolist(index=False) 
 
   def get_cols_dtype(self):
     """
       Return dictionary with column name as keys and data type as values
     """
-    return pd.DataFrame(self.df.dtypes, columns=['Type']).astype
+    return self.df.dtypes.to_dict()
+    
+  
     
   def get_n_duplicates(self):
     """
@@ -57,19 +60,19 @@ class Dataset():
     """
       Return Pandas Dataframe with top rows of loaded dataset
     """
-    return self.df.head()
+    return self.df.head(n=number)
 
   def get_tail(self, number):
     """
       Return Pandas Dataframe with bottom rows of loaded dataset
     """
-    return self.df.tail()
+    return self.df.tail(n=number)
 
   def get_sample(self, number):
     """
       Return Pandas Dataframe with random sampled rows of loaded dataset
     """
-    return self.df.sample()
+    return self.df.sample(n=number)
 
   def get_numeric_columns(self):
     """
