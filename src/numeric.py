@@ -1,14 +1,15 @@
 import streamlit as st
 from dataclasses import dataclass
 import pandas as pd
+import numpy as np
 import matplotlib as mp
+import matplotlib.pyplot as plt
 import plotly.express as px
 
 @dataclass
 class NumericColumn:
-  data = pd.read_csv('01-01-2021.csv')
-  col_name = data['Lat']
-  serie = pd.Series(col_name)
+  col_name: str = None
+  serie: pd.Series = None
 
   def get_name(self):
     """
@@ -70,14 +71,26 @@ class NumericColumn:
     """
     return self.serie.median()
 
+
+  
   def get_histogram(self):
     """
     Return the generated histogram for selected column
     """
-    return px.histogram(self.serie, x = 'title')
+    return self.serie.hist()
+
+ 
 
   def get_frequent(self):
     """
     Return the Pandas dataframe containing the occurrences and percentage of the top 20 most frequent values
     """
-    return self.serie.value_counts().nlargest(20) 
+    df = pd.DataFrame(self.serie.value_counts()).reset_index()
+    # name the columns
+    df.columns = ["value", "occurrence"]
+    # get grand total of counts
+    total = df["occurrence"].sum()
+    # calculate percentage column as a decimal number
+    df["percentage"] = df["occurrence"] / total
+    # display dataframe as table
+    return st.dataframe(df)

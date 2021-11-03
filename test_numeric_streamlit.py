@@ -18,5 +18,6 @@ df = pd.read_csv(csv_path)
 
 st.title("Numeric Test")
 
-px.histogram(dc.get_histogram())
-st.table(dc.get_frequent())
+dc.get_histogram()
+dc.get_frequent()
+
