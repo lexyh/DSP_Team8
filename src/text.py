@@ -116,6 +116,8 @@ class TextColumn:
         #total number of data points in column, after removing nulls
         total = self.serie.size # overall size
         total_adj = d.size #adjusted for whitespace, empty and nulls 
-        df['Percentage'] = (df['Occurance']/total_adj)*100
+        df['Percentage'] = (df['Occurance']/total_adj)
         
-        return df 
+        dfs = df.style.format(na_rep='MISSING', formatter={("Percentage"): "{:.2%}"}) #format percentage column
+        #df.style.set_caption("The table includes counts for whitespace, nulls and empty strings. /n However these are not reflected in the percentage values shown.")
+        return dfs
