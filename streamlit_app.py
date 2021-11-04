@@ -9,12 +9,14 @@ import src.text as tx
 st.title("Data Explorer Tool")
 # read data
 uploaded_file = st.file_uploader("Choose a CSV file")
+
 if uploaded_file is not None:
     # initialise Dataset object - this includes all data in the CSV
     ds = da.Dataset()
     ds.name = "my_dataset"
     # pandas is used to read the uploaded binary file as a CSV, then stored to the df attribute of Dataset object ds
     ds.df = pd.read_csv(uploaded_file)
+    
     
     # display overall Dataset information
     st.title("1. Overall Information")
@@ -102,23 +104,29 @@ if uploaded_file is not None:
                 """
                 Logic to compile a caption to present underneath the mode for the column
                 """
-                if md == 1:
+                if len(md) == 1:
                     caption_text = "Single mode found for this column."
                 if len(md) > 1 :
                     caption_text = "Note: Multiple values in this column are equally most frequent."
                     
                 return caption_text
 
-            # Define variables for printing for mode and subheading
+
+            ### RETURN SPECIFIC RESULTS FOR COLUMN BEFORE WRITING ###
             subheader_text = (f'3.{t}. Field Name: {tc.col_name}') #subheading content
             md = tc.get_mode() #return mode
 
-            ### write to streamlit ###
+            
+            ### WRITE RESULTS TO STREAMLIT ###
             st.subheader(tc.subheader_text)
+            
+            
+            ## WRITE SUMMARY ##
             st.write("The characteristics of this column are shown below:")                  
             st.dataframe(text_summary(tc))
+
+            ## WRITE MODE ##
             st.write("The most frequent values in this column are: ")
-            
             # Check mode and write values and calculated caption
             if md is None:
                 st.write('No Mode Found')
@@ -127,10 +135,9 @@ if uploaded_file is not None:
             st.caption(mode_caption(md))
 
 
-            # write out the frequency table & graph
+            ## WRITE FREQUENCY TABLE & GRAPH ##
             st.write('Frequency Table:')
-            st.table(tc.get_frequent().style.highlight_max(axis=0)) #highlighting included but can be toggled off. 
-
+            st.table(tc.get_frequent()) #style.highlight_max(axis=0)) #highlighting included but can be toggled off. 
             st.write('Frequency Graph:')
             st.plotly_chart(tc.get_barchart())
 

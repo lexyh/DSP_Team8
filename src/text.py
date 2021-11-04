@@ -92,10 +92,12 @@ class TextColumn:
         x = self.serie.unique()
         y = self.serie.value_counts()
 
-        fig = go.Figure(data=[go.Bar(x=x, y=y, hovertext = ['some text' ])])
-
+        fig = go.Figure(data=[go.Bar(x=x, y=y)])
+       
         # figure formatting
         fig.update_layout(title = "Frequency of Column Values") #bargap = 0.3, couldn't adjust
+        fig.update_layout(hovermode="x unified")
+       
 
         return fig
 
