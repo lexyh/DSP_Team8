@@ -76,10 +76,6 @@ class NumericColumn:
     """
     Return the generated histogram for selected column
     """
-  def get_histogram(self):
-    """
-    Return the generated histogram for selected column
-    """
     data=self.serie
     fig, ax = plt.subplots()
     #set theme
