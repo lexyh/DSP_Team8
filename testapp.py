@@ -65,8 +65,16 @@ if uploaded_file is not None:
     st.write("Random Sample Rows of Table")
     st.dataframe(ds.get_sample(number))
     
-    ## Multi select box which will show text fields where the user can select to change them to datetime fields --Needs to finalised
-    st.multiselect ("Which columns do you want to convert to dates?", ds.df.columns.tolist ())
-    
-    
-    
+    ## Multi select box which will only show text fields where the user can select to change them to datetime fields --Needs to finalised
+    datecolumns = st.multiselect ("Which columns do you want to convert to dates?", ds.get_text_columns())
+    if datecolumns is not None:
+        st.write(datecolumns)
+       ## ds.df[datecolumns] = pd.to_datetime(ds.df[datecolumns])
+        
+
+    st.write(ds.get_numeric_columns())
+    st.write(ds.get_text_columns())
+    st.write(ds.get_date_columns())
+        
+        
+        
