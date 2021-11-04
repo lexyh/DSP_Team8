@@ -4,11 +4,13 @@ from dataclasses import dataclass
 import pandas as pd
 
 
+
+
 @dataclass
-class Dataset:
-  name: str
-  df: pd.DataFrame
-  
+class Dataset():
+  name: str =None
+  df: pd.DataFrame =None
+
   def get_name(self):
     """
     Return filename of loaded dataset
@@ -19,55 +21,58 @@ class Dataset:
     """
       Return number of rows of loaded dataset
     """
-    return None
+    return str(self.df.shape[0])
 
   def get_n_cols(self):
     """
       Return number of columns of loaded dataset
     """
-    return None
+    return str(self.df.shape[1])
 
   def get_cols_list(self):
     """
       Return list column names of loaded dataset
     """
-    return None
+    
+    return self.df.columns.tolist(index=False) 
 
   def get_cols_dtype(self):
     """
       Return dictionary with column name as keys and data type as values
     """
-    return None
-
+    return self.df.dtypes.to_dict()
+    
+  
+    
   def get_n_duplicates(self):
     """
       Return number of duplicated rows of loaded dataset
     """
-    return None
+    return str(self.df[self.df.duplicated()].shape[0])
 
   def get_n_missing(self):
     """
       Return number of rows with missing values of loaded dataset
     """
-    return None
+    return str((self.df.isna().sum(axis=1) > 0).sum())
 
-  def get_head(self, n=5):
+  def get_head(self, number):
     """
       Return Pandas Dataframe with top rows of loaded dataset
     """
-    return None
+    return self.df.head(n=number)
 
-  def get_tail(self, n=5):
+  def get_tail(self, number):
     """
       Return Pandas Dataframe with bottom rows of loaded dataset
     """
-    return None
+    return self.df.tail(n=number)
 
-  def get_sample(self, n=5):
+  def get_sample(self, number):
     """
       Return Pandas Dataframe with random sampled rows of loaded dataset
     """
-    return None
+    return self.df.sample(n=number)
 
   def get_numeric_columns(self):
     """
@@ -86,4 +91,3 @@ class Dataset:
       Return list column names of datetime type from loaded dataset
     """
     return None
-
