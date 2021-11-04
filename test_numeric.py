@@ -10,9 +10,7 @@ class TestNumeric(unittest.TestCase):
         # create series of data
         dc1 = NumericColumn()
         dc1.col_name = "my_test"
-        dc2.serie = pd.to_datetime(df[dc2.col_name], dayfirst=True)
-
-
+        
         # test methods
         self.assertEqual(dc1.get_name(),"my_test")
         self.assertEqual(dc1.get_unique(),7)

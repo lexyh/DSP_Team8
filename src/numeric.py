@@ -1,10 +1,11 @@
+# Author: A Ly
+# defining the Numeric data class, imported as nm in the streamlit_app.py  
+
 import streamlit as st
 from dataclasses import dataclass
 import pandas as pd
-import numpy as np
-import matplotlib as mp
 import matplotlib.pyplot as plt
-import plotly.express as px
+import seaborn as sns
 
 @dataclass
 class NumericColumn:
@@ -70,23 +71,30 @@ class NumericColumn:
     Return the median value for selected column
     """
     return self.serie.median()
-
-
   
   def get_histogram(self):
     """
     Return the generated histogram for selected column
     """
-    return self.serie.hist()
-
- 
-
+  def get_histogram(self):
+    """
+    Return the generated histogram for selected column
+    """
+    data=self.serie
+    fig, ax = plt.subplots()
+    #set theme
+    sns.set_style("whitegrid")
+    #create histogram
+    sns.histplot(data, x=self.serie, alpha=1, color = 'navy',  bins=50).set_title("Histogram")
+    st.pyplot(fig)
+  
   def get_frequent(self):
     """
     Return the Pandas dataframe containing the occurrences and percentage of the top 20 most frequent values
     """
+    #create dataframe
     df = pd.DataFrame(self.serie.value_counts()).reset_index()
-    # name the columns
+    # name columns
     df.columns = ["value", "occurrence"]
     # get grand total of counts
     total = df["occurrence"].sum()
