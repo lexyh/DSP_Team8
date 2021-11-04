@@ -41,7 +41,7 @@ if uploaded_file is not None:
     # create counters for writing subheading
     # used to write the relevamt subheading text to the app for each column loop
 
-    t = 0 #counter for to track the text column instance it is. 
+    t = 0 #counter for to track the text column instance it is, used to format the display subtitle
     d = 0
     n = 0
 
@@ -79,7 +79,9 @@ if uploaded_file is not None:
                 Class: defined in text.py
                 """
                 
-                summary = {}
+                summary = {} #initialise empty dict
+                
+                #write functions to dictionary
                 summary["Missing Values"] = TextColumn.get_missing()
                 summary["Whitespace Values"] = TextColumn.get_whitespace()
                 summary["Unique Values"] = TextColumn.get_unique()
@@ -88,7 +90,6 @@ if uploaded_file is not None:
                 summary["All Uppercase"] = TextColumn.get_uppercase()
                 summary["Only Alphabet Characters"] = TextColumn.get_alphabet()
                 summary["Only (numeric) Digits"] = TextColumn.get_digit()
-                
                 #convert to dataframe to allow streamlit to display the dictionary
                 
                 df = pd.DataFrame(pd.Series(summary).reset_index()) 
@@ -101,39 +102,39 @@ if uploaded_file is not None:
                 """
                 Logic to compile a caption to present underneath the mode for the column
                 """
-                caption_text = None #empty string 
-            
-                if md is None:
-                    caption_text = "No values shown as all values in the selected are unique"
+                if md == 1:
+                    caption_text = "Single mode found for this column."
                 if len(md) > 1 :
                     caption_text = "Note: Multiple values in this column are equally most frequent."
                     
                 return caption_text
 
-            # load in results for mode and subheading
+            # Define variables for printing for mode and subheading
             subheader_text = (f'3.{t}. Field Name: {tc.col_name}') #subheading content
             md = tc.get_mode() #return mode
 
-            # write to stremlit
+            ### write to streamlit ###
             st.subheader(tc.subheader_text)
-
-            st.write("The characteristics of this column are shown below:")
-                    
+            st.write("The characteristics of this column are shown below:")                  
             st.dataframe(text_summary(tc))
-
             st.write("The most frequent values in this column are: ")
-            # logic to prepare caption to write under the 'mode' results. 
+            
+            # Check mode and write values and calculated caption
             if md is None:
                 st.write('No Mode Found')
             if md is not None:
                 st.write(md)
             st.caption(mode_caption(md))
 
+
+            # write out the frequency table & graph
             st.write('Frequency Table:')
-            st.dataframe(tc.get_frequent().style.highlight_max(axis=0)) #highlighting included but can be toggled off. 
+            st.table(tc.get_frequent().style.highlight_max(axis=0)) #highlighting included but can be toggled off. 
 
             st.write('Frequency Graph:')
             st.plotly_chart(tc.get_barchart())
+
+        ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
 
 
         elif dtype == "datetime64":
