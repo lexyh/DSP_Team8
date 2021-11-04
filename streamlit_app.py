@@ -6,9 +6,11 @@ import src.datetime as dt
 import src.numeric as nm
 import src.text as tx
 
+
 st.title("Data Explorer Tool")
 # read data
 uploaded_file = st.file_uploader("Choose a CSV file")
+
 
 if uploaded_file is not None:
     # initialise Dataset object - this includes all data in the CSV
@@ -47,6 +49,46 @@ if uploaded_file is not None:
     d = 0
     n = 0
 
+    def text_summary(TextColumn):
+            """
+            Pass text column methods to column to return value counts
+            Compile data into a pandas dataframe & return
+            
+            Expected parameter: TextColumn() 
+            Class: defined in text.py
+            """
+            
+            summary = {} #initialise empty dict
+            
+            #write functions to dictionary
+            summary["Missing Values"] = TextColumn.get_missing()
+            summary["Whitespace Values"] = TextColumn.get_whitespace()
+            summary["Unique Values"] = TextColumn.get_unique()
+            summary["Empty Values"] = TextColumn.get_empty()
+            summary["All Lowercase"] = TextColumn.get_lowercase()
+            summary["All Uppercase"] = TextColumn.get_uppercase()
+            summary["Only Alphabet Characters"] = TextColumn.get_alphabet()
+            summary["Only (numeric) Digits"] = TextColumn.get_digit()
+            #convert to dataframe to allow streamlit to display the dictionary
+            
+            df = pd.DataFrame(pd.Series(summary).reset_index()) 
+            df.columns = ["Value Category", "Counts"]
+            
+            return df
+
+    def mode_caption(md):
+
+            """
+            Logic to compile a caption to present underneath the mode for the column
+            """
+            if len(md) == 1:
+                caption_text = "Single mode found for this column."
+            if len(md) > 1 :
+                caption_text = "Note: Multiple values in this column are equally most frequent."
+                
+            return caption_text
+
+
     # loop through each column in the Dataset and display the information for the corrosponding data type
     for column in ds.df:
         # get the column data type
@@ -72,45 +114,7 @@ if uploaded_file is not None:
             
             ### display information with text.py functions ###
 
-            def text_summary(TextColumn):
-                """
-                Pass text column methods to column to return value counts
-                Compile data into a pandas dataframe & return
-                
-                Expected parameter: TextColumn() 
-                Class: defined in text.py
-                """
-                
-                summary = {} #initialise empty dict
-                
-                #write functions to dictionary
-                summary["Missing Values"] = TextColumn.get_missing()
-                summary["Whitespace Values"] = TextColumn.get_whitespace()
-                summary["Unique Values"] = TextColumn.get_unique()
-                summary["Empty Values"] = TextColumn.get_empty()
-                summary["All Lowercase"] = TextColumn.get_lowercase()
-                summary["All Uppercase"] = TextColumn.get_uppercase()
-                summary["Only Alphabet Characters"] = TextColumn.get_alphabet()
-                summary["Only (numeric) Digits"] = TextColumn.get_digit()
-                #convert to dataframe to allow streamlit to display the dictionary
-                
-                df = pd.DataFrame(pd.Series(summary).reset_index()) 
-                df.columns = ["Value Category", "Counts"]
-                
-                return df
-
-            def mode_caption(md):
-
-                """
-                Logic to compile a caption to present underneath the mode for the column
-                """
-                if len(md) == 1:
-                    caption_text = "Single mode found for this column."
-                if len(md) > 1 :
-                    caption_text = "Note: Multiple values in this column are equally most frequent."
-                    
-                return caption_text
-
+    
 
             ### RETURN SPECIFIC RESULTS FOR COLUMN BEFORE WRITING ###
             subheader_text = (f'3.{t}. Field Name: {tc.col_name}') #subheading content
