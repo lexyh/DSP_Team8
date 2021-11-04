@@ -8,8 +8,8 @@ import pandas as pd
 
 @dataclass
 class Dataset():
-  name: str =None
-
+  name: str = None
+  df: pd.core.frame.DataFrame = None
 
 
   def get_n_rows(self):
