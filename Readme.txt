@@ -3,7 +3,7 @@
 **Team 8**
 
 Hayden Puckeridge
-Anna
+Anna Ly
 Suellen Fletcher
 Alexis Henderson
 
@@ -69,4 +69,3 @@ to run tests:
 python3 -m unittest src/test/test_datetime.py
 must be run from this directory
 
-testing - Anna 12945605
