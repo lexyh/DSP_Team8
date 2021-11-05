@@ -1,4 +1,4 @@
-# To be filled by students
+### Imports ###
 import streamlit as st
 import pandas as pd
 from io import StringIO
@@ -7,17 +7,61 @@ import src.datetime as dt
 import src.numeric as nm
 import src.text as tx
 
-st.title("Data Explorer Tool")
-# read data
-#uploaded_file = st.file_uploader("Choose a CSV file") #commented out as the file picker object returns a stream object. Not a file that can be automatically read in with pandas. 
-#looking at pd.read_csv(StringIO(stream_file)) but it's not working. 
-
-uploaded_file = st.file_uploader("Choose a CSV file")
-file_name = uploaded_file.name
-st.write(f'Your file {file_name} was uploaded sucessfully.')
-df = pd.DataFrame()
-
-df = pd.read_csv(uploaded_file)
+### Sub functions ###
+def dataset_output(file_name, ds):
+    # display overall Dataset information in streamlit
+    st.title("1. Overall Information")
+     
+    # Write the name of the CSV that is uploaded in streamlit
+    st.write("Name of Table: ", file_name)
+    
+    # Store Count number of rows and then write the number of rows
+    rows = ds.get_n_rows()
+    st.write("Number of Rows: " + rows)
+    
+    # store Count number of columns and then write in streamlit the number of columns
+    cols = ds.get_n_cols() 
+    # Needs to be finished    
+    st.write("Number of Columns: " + cols) 
+    
+    # write number of duplicate rows in streamlit
+    st.write("Number of Duplicated Rows: " + ds.get_n_duplicates())
+    
+    # write number of  rows with missing values in any variable in streamlit
+    st.write("Number of Rows with Missing Values: " + ds.get_n_missing())
+    
+    # write list of columns in streamlit
+    st.subheader("List of Columns:")
+    st.write(', '.join(ds.get_cols_list()))
+    
+    # Write List of column names and datatypes  in streamlit
+    st.subheader("Type of Columns:")
+    df_types = pd.DataFrame(ds.df.dtypes, columns=['Type'])
+    df_types = df_types.astype(str)
+    st.dataframe(df_types)
+    
+    # Create a slider in streamlit defaulting to allow user to select number of rows to be displayed in next three tables (default 5).
+    number = st.slider('Select the numbers of rows to be displayed',0,int(rows),5)
+    
+    # Write table in Streamlit showing top rows selected in slider (default 5)
+    st.subheader("Top Rows of Table")
+    st.dataframe(ds.get_head(number))
+    
+    # Write table in Streamlit showing bottom rows selected in slider (default 5)
+    st.subheader("Bottom Rows of Table")
+    st.dataframe(ds.get_tail(number))
+    
+    # Write table in Streamlit showing random rows selected in slider (default 5)
+    st.subheader("Random Sample Rows of Table")
+    st.dataframe(ds.get_sample(number))
+    
+    # Multi select box which will only show text fields where the user can select to change them to datetime fields --I NEED HELP PLEASE
+    #datecolumns = st.multiselect ("Which columns do you want to convert to dates?", ds.get_text_columns())
+    #if datecolumns is not None:
+        #List1 =str(','.join(datecolumns))
+        #mydict =ds.get_cols_dtype()
+        #mydict = {k:v for k,v in mydict.items() if k in List1}
+        #ds.df.astype({mydict: 'datetime64[ns]'} )
 
 def text_summary(TextColumn):
     """
@@ -46,7 +90,6 @@ def text_summary(TextColumn):
     return df
 
 def mode_caption(md):
-
     """
     Logic to compile a caption to present underneath the mode for the column.
     Expected Input:
@@ -63,46 +106,33 @@ def mode_caption(md):
 
     return caption_text
 
-# create counters for writing subheading
-# used to write the relevant subheading text to the app for each column loop
+### Main program ###
+st.title("Data Explorer Tool")
 
-t = 0 #counter to track the text column instance it is, used to format the display subtitle
-d = 0
-n = 0
-
+# select CSV data file
+uploaded_file = st.file_uploader("Choose a CSV file")
 
 if uploaded_file is not None:
-    st.write(f'Your file {uploaded_file} was uploaded sucessfully.')
-    
+    file_name = uploaded_file.name
+    st.write(f'Your file {file_name} was uploaded sucessfully.')
+
     # initialise Dataset object - this includes all data in the CSV
     ds = da.Dataset()
-    ds.name = "my_dataset"
+    ds.name = file_name
     # pandas is used to read the uploaded binary file as a CSV, then stored to the df attribute of Dataset object ds
     ds.df = pd.read_csv(uploaded_file)
     
     # display overall Dataset information
-    st.title("1. Overall Information")
-    st.write(ds.df)
-    st.write("Name of Table: ", uploaded_file.name)
-    rows = ds.get_n_rows()
-    cols = ds.get_n_cols()
-    
-    st.write("Number of Rows: " + rows)
-    st.write("Number of Columns: " + cols) 
-    
-    number = st.slider('Select the numbers of rows to be displayed',0,int(rows),5)
-    st.write("Top Rows of Table")
-    st.dataframe(ds.get_head(number))
-    st.write("Bottom Rows of Table")
-    st.dataframe(ds.get_tail(number))
-    st.write("Random Sample Rows of Table")
-    st.dataframe(ds.get_sample(number))
-    ### fill in other display information with data.py functions ###
+    dataset_output(file_name, ds)
     
     # get a dictionary of column data types
     dtype_dict = ds.get_cols_dtype()
     
-    
+    # create counters for writing subheading
+    # used to write the relevant subheading text to the app for each column loop
+    t = 0   #counter to track the text column instance it is, used to format the display subtitle
+    d = 0   #date
+    n = 0   #numeric
     
     # loop through each column in the Dataset and display the information for the corrosponding data type
     for column in ds.df:
@@ -133,7 +163,7 @@ if uploaded_file is not None:
             md = tc.get_mode() #return mode
 
             ### WRITE RESULTS TO STREAMLIT ###
-            st.subheader(tc.subheader_text)
+            st.subheader(subheader_text)
             
             ## WRITE SUMMARY ##
             st.write("The characteristics of this column are shown below:")                  
@@ -158,7 +188,6 @@ if uploaded_file is not None:
 
             ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
 
-            
         elif dtype == "datetime64":
             # initialise DateColumn object
             dc = dx.DateColumn()
@@ -166,4 +195,4 @@ if uploaded_file is not None:
             dc.serie = ds.df[column]
             ### fill in other display information with datetime.py functions ###
             dc.get_barchart()
-            dc.get_frequent()  
+            dc.get_frequent()    

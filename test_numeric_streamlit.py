@@ -9,20 +9,35 @@ csv_path = "01-01-2021.csv"
 df = pd.read_csv(csv_path)
 
 # init NumericColumn
-dc = n.NumericColumn()
-dc.col_name = "Lat"
-dc.serie = pd.to_numeric(df[dc.col_name])
+nc = n.NumericColumn()
+nc.col_name = "Lat"
+nc.serie = pd.to_numeric(df[nc.col_name])
 
-neg_values = pd.Series([-1,-2,-2,0,1,2])
 
-x=neg_values[neg_values < 0].sum() 
-print (x)
 
 # read csv
 df = pd.read_csv(csv_path)
 
 st.title("Numeric Test")
 
+def numeric_summary(NumericColumn):
 
-dc.get_histogram()
-dc.get_frequent()
+    summary = {}
+    summary["Missing Values"] = NumericColumn.get_missing()
+    summary["Unique Values"] = NumericColumn.get_unique()
+    summary["Number Rows with 0"] = NumericColumn.get_zeros()
+    summary["Number of Rows with Negative Values"] = NumericColumn.get_negatives()
+    summary["Average Value"] = NumericColumn.get_mean()
+    summary["Standard Deviation Value"] = NumericColumn.get_std()
+    summary["Minimum Value"] = NumericColumn.get_min()
+    summary["Maximum Value"] = NumericColumn.get_max()
+    summary["Median Value"] = NumericColumn.get_median()
+
+    df = pd.DataFrame(pd.Series(summary).reset_index()) 
+    df.columns = ["Value Category", "Counts"]
+
+    return df
+
+
+nc.get_histogram()
+nc.get_frequent()

@@ -83,6 +83,7 @@ class NumericColumn():
     sns.set_style("whitegrid")
     #create histogram
     histogram = sns.histplot(data, x=self.serie, alpha=1, color = 'navy',  bins=50).set_title("Histogram")
+    st.pyplot(fig)
     return histogram
      
   
