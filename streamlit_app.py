@@ -9,6 +9,60 @@ import src.text as tx
 st.title("Data Explorer Tool")
 # read data
 uploaded_file = st.file_uploader("Choose a CSV file")
+
+def text_summary(TextColumn):
+    """
+    Pass text column methods to column to return value counts
+    Compile data into a pandas dataframe & return
+
+    Expected parameter: TextColumn() 
+    Class: defined in text.py
+    """
+
+    summary = {} #initialise empty dict
+
+    #write functions to dictionary
+    summary["Missing Values"] = TextColumn.get_missing()
+    summary["Whitespace Values"] = TextColumn.get_whitespace()
+    summary["Unique Values"] = TextColumn.get_unique()
+    summary["Empty Values"] = TextColumn.get_empty()
+    summary["All Lowercase"] = TextColumn.get_lowercase()
+    summary["All Uppercase"] = TextColumn.get_uppercase()
+    summary["Only Alphabet Characters"] = TextColumn.get_alphabet()
+    summary["Only (numeric) Digits"] = TextColumn.get_digit()
+    
+    #convert to dataframe to allow streamlit to display the dictionary
+    df = pd.DataFrame(pd.Series(summary).reset_index()) 
+    df.columns = ["Value Category", "Counts"]
+
+    return df
+
+def mode_caption(md):
+
+    """
+    Logic to compile a caption to present underneath the mode for the column.
+    Expected Input:
+     - md: list 
+     - md description: List derived from get_mode() funcions in defined in text.py, numeric.py, datetime.py
+    Output: 
+     - int: length of list object
+    """
+    
+    if len(md) == 1:
+        caption_text = "Single mode found for this column."
+    if len(md) > 1 :
+        caption_text = "Note: Multiple values in this column are equally most frequent."
+
+    return caption_text
+
+# create counters for writing subheading
+# used to write the relevant subheading text to the app for each column loop
+
+t = 0 #counter to track the text column instance it is, used to format the display subtitle
+d = 0
+n = 0
+
+
 if uploaded_file is not None:
     # initialise Dataset object - this includes all data in the CSV
     ds = da.Dataset()
@@ -38,6 +92,8 @@ if uploaded_file is not None:
     # get a dictionary of column data types
     dtype_dict = ds.get_cols_dtype()
     
+    
+    
     # loop through each column in the Dataset and display the information for the corrosponding data type
     for column in ds.df:
         # get the column data type
@@ -59,7 +115,39 @@ if uploaded_file is not None:
             tc = tx.TextColumn()
             tc.col_name = column
             tc.serie = ds.df[column]
-            ### fill in other display information with text.py functions ###
+            
+            ### display information with text.py functions ###
+            
+            ### RETURN SPECIFIC RESULTS FOR COLUMN BEFORE WRITING ###
+            subheader_text = (f'3.{t}. Field Name: {tc.col_name}') #subheading content
+            md = tc.get_mode() #return mode
+
+            ### WRITE RESULTS TO STREAMLIT ###
+            st.subheader(tc.subheader_text)
+            
+            ## WRITE SUMMARY ##
+            st.write("The characteristics of this column are shown below:")                  
+            st.dataframe(text_summary(tc))
+
+            ## WRITE MODE ##
+            st.write("The most frequent values in this column are: ")
+            # Check mode and write values and calculated caption
+            if md is None:
+                st.write('No Mode Found')
+            if md is not None:
+                st.write(md)
+            st.caption(mode_caption(md))
+
+            ## WRITE FREQUENCY TABLE & GRAPH ##
+            st.write('Frequency Table:')
+            st.table(tc.get_frequent()) #style.highlight_max(axis=0)) #highlighting included but can be toggled off. 
+            st.write('Frequency Graph:')
+            st.text("The graph below plots the frequency of values in thhe column from most frequent to least frequent.")
+            st.text("Hover over a bar to see specific details. Use the arrows to open the chart in a larger window.")
+            st.plotly_chart(tc.get_barchart())
+
+            ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
+
             
         elif dtype == "datetime64":
             # initialise DateColumn object
