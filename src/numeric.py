@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 @dataclass
-class NumericColumn:
+class NumericColumn():
   col_name: str = None
   serie: pd.Series = None
 
@@ -22,7 +22,7 @@ class NumericColumn:
     """
     Return number of unique values for selected column
     """
-    return self.serie.dropna().unique.size
+    return self.serie.nunique()
 
   def get_missing(self):
     """
@@ -40,7 +40,7 @@ class NumericColumn:
     """
     Return number of negative values for selected column
     """
-    return ((self.serie>=0).sum())
+    return self.serie < 0
 
   def get_mean(self):
     """
@@ -72,6 +72,10 @@ class NumericColumn:
     """
     return self.serie.median()
   
+  def get_histogram(self):
+    """
+    Return the generated histogram for selected column
+    """
   def get_histogram(self):
     """
     Return the generated histogram for selected column
