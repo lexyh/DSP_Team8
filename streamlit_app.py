@@ -8,7 +8,7 @@ import src.numeric as nm
 import src.text as tx
 
 ### Sub functions ###
-def datset_output(file_name, ds):
+def dataset_output(file_name, ds):
     # display overall Dataset information in streamlit
     st.title("1. Overall Information")
      
@@ -111,7 +111,7 @@ def mode_caption(md):
 st.title("Data Explorer Tool")
 
 # select CSV data file
-uploaded file = st.file_uploader("Choose a CSV file")
+uploaded_file = st.file_uploader("Choose a CSV file")
 
 if uploaded_file is not None:
     file_name = uploaded_file.name
@@ -164,7 +164,7 @@ if uploaded_file is not None:
             md = tc.get_mode() #return mode
 
             ### WRITE RESULTS TO STREAMLIT ###
-            st.subheader(tc.subheader_text)
+            st.subheader(subheader_text)
             
             ## WRITE SUMMARY ##
             st.write("The characteristics of this column are shown below:")                  
@@ -189,7 +189,6 @@ if uploaded_file is not None:
 
             ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
 
-            
         elif dtype == "datetime64":
             # initialise DateColumn object
             dc = dx.DateColumn()
