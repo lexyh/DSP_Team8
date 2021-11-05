@@ -1,6 +1,7 @@
 ### Imports ###
 import streamlit as st
 import pandas as pd
+import numpy as np
 from io import StringIO
 import src.data as da
 import src.datetime as dt
@@ -54,14 +55,6 @@ def dataset_output(file_name, ds):
     # Write table in Streamlit showing random rows selected in slider (default 5)
     st.subheader("Random Sample Rows of Table")
     st.dataframe(ds.get_sample(number))
-    
-    # Multi select box which will only show text fields where the user can select to change them to datetime fields --I NEED HELP PLEASE
-    #datecolumns = st.multiselect ("Which columns do you want to convert to dates?", ds.get_text_columns())
-    #if datecolumns is not None:
-        #List1 =str(','.join(datecolumns))
-        #mydict =ds.get_cols_dtype()
-        #mydict = {k:v for k,v in mydict.items() if k in List1}
-        #ds.df.astype({mydict: 'datetime64[ns]'} )
 
 def text_summary(TextColumn):
     """
@@ -129,6 +122,13 @@ if uploaded_file is not None:
     # get a dictionary of column data types
     dtype_dict = ds.get_cols_dtype()
     
+    # Multi select box which will only show text fields where the user can select to change them to datetime fields --I NEED HELP PLEASE
+    date_cols = st.multiselect ("Which columns do you want to convert to dates?", ds.get_text_columns())
+    if date_cols is not None:
+        for key in dtype_dict:
+            if key in date_cols:
+                dtype_dict[key] = np.dtype("datetime64")
+    
     # create counters for writing subheading
     # used to write the relevant subheading text to the app for each column loop
     t = 0   #counter to track the text column instance it is, used to format the display subtitle
@@ -141,7 +141,7 @@ if uploaded_file is not None:
         dtype = dtype_dict[column]
         
         # for numeric columns
-        if dtype == "int64" or dtype == "float64":
+        if dtype == np.int64 or dtype == np.float64:
             # initialise NumericColumn object
             nc = nm.NumericColumn()
             nc.col_name = column
@@ -189,11 +189,12 @@ if uploaded_file is not None:
 
             ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
 
-        elif dtype == "datetime64":
+        elif dtype == np.datetime64:
             # initialise DateColumn object
-            dc = dx.DateColumn()
+            dc = dt.DateColumn()
             dc.col_name = column
             dc.serie = ds.df[column]
+            print("Running")
             ### fill in other display information with datetime.py functions ###
-            dc.get_barchart()
-            dc.get_frequent()    
+            st.bar_chart(dc.get_barchart())
+            st.dataframe(dc.get_frequent())    

@@ -89,8 +89,8 @@ class DateColumn:
     """
     # get series of frequency value counts
     df = self.serie.value_counts()
-    # plot bar chart
-    return st.bar_chart(df)
+    # return dataframe to be plotted as bar chart using st.bar_chart()
+    return df
 
   def get_frequent(self):
     """
@@ -104,5 +104,5 @@ class DateColumn:
     total = df["occurrence"].sum()
     # calculate percentage column as a decimal number
     df["percentage"] = df["occurrence"] / total
-    # display dataframe as table
-    return st.dataframe(df)
+    # return dataframe to be displayed using st.dataframe()
+    return df
