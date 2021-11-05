@@ -83,6 +83,24 @@ def text_summary(TextColumn):
 
     return df
 
+def numeric_summary(NumericColumn):
+
+    summary = {}
+
+    summary["Missing Values"] = NumericColumn.get_missing()
+    summary["Unique Values"] = NumericColumn.get_unique()
+    summary["Number Rows with 0"] = NumericColumn.get_zeros()
+    summary["Number of Rows with Negative Values"] = NumericColumn.get_negatives()
+    summary["Average Value"] = NumericColumn.get_mean()
+    summary["Standard Deviation Value"] = NumericColumn.get_std()
+    summary["Minimum Value"] = NumericColumn.get_min()
+    summary["Maximum Value"] = NumericColumn.get_max()
+    summary["Median Value"] = NumericColumn.get_median()
+
+    df = pd.DataFrame(pd.Series(summary).reset_index()) 
+
+    return df
+
 def mode_caption(md):
     """
     Logic to compile a caption to present underneath the mode for the column.
@@ -151,6 +169,7 @@ if uploaded_file is not None:
             subheader_text = (f'1.{n}. Field Name: {nc.col_name}') #subheading content
             st.subheader(subheader_text)
             n += 1
+            st.write(numeric_summary(nc))
             
             # display results
             nc.get_histogram()
