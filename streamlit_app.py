@@ -184,6 +184,7 @@ if uploaded_file is not None:
             # display heading and increment numbering
             subheader_text = (f'1.{n}. Field Name: {nc.col_name}') #subheading content
             st.subheader(subheader_text)
+            st.write('Numerical Column')
             n += 1
             
             # display results
@@ -206,6 +207,7 @@ if uploaded_file is not None:
             # display heading and increment numbering
             subheader_text = (f'2.{d}. Field Name: {dc.col_name}') #subheading content
             st.subheader(subheader_text)
+            st.write('Date-Time Column')
             d += 1
             
             # display results
@@ -237,6 +239,7 @@ if uploaded_file is not None:
 
             # write heading to streamlit and increment heading number
             st.subheader(subheader_text)
+            st.write('Text Column')
             t += 1
             
             # write summary
