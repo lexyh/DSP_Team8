@@ -1,6 +1,7 @@
 # To be filled by students
 import streamlit as st
 import pandas as pd
+from io import StringIO
 import src.data as da
 import src.datetime as dt
 import src.numeric as nm
@@ -8,7 +9,18 @@ import src.text as tx
 
 st.title("Data Explorer Tool")
 # read data
-uploaded_file = st.file_uploader("Choose a CSV file")
+#uploaded_file = st.file_uploader("Choose a CSV file") #commented out as the file picker object returns a stream object. Not a file that can be automatically read in with pandas. 
+#looking at pd.read_csv(StringIO(stream_file)) but it's not working. 
+
+stream_file = st.file_uploader("Choose a CSV file")
+file_name = stream_file.name
+st.write(f'Your file {file_name} was uploaded sucessfully.')
+#note: uploaded file is not a CSV object, it's a stream object. 
+
+'''
+' NEED TO CONVERT STREAM FILE OBJECT TO A DATA FRAME'
+'''
+uploaded_file = "converted object"
 
 def text_summary(TextColumn):
     """
