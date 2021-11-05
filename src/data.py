@@ -29,7 +29,7 @@ class Dataset():
       Return list column names of loaded dataset
     """
     
-    return df.columns.tolist() 
+    return self.df.columns.tolist() 
 
   def get_cols_dtype(self):
     """
