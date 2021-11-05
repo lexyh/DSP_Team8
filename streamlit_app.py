@@ -11,7 +11,6 @@ st.title("Data Explorer Tool")
 # read data
 uploaded_file = st.file_uploader("Choose a CSV file")
 
-
 def text_summary(TextColumn):
     """
     Pass text column methods to column to return value counts
@@ -66,6 +65,7 @@ n = 0
 
 
 if uploaded_file is not None:
+    st.write(f'Your file {uploaded_file} was uploaded sucessfully.')
     # initialise Dataset object - this includes all data in the CSV
     ds = da.Dataset()
     ds.name = "my_dataset"
