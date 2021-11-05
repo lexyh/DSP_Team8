@@ -40,7 +40,7 @@ class NumericColumn():
     """
     Return number of negative values for selected column
     """
-    return self.serie < 0
+    return (self.serie < 0).sum()
 
   def get_mean(self):
     """
@@ -72,10 +72,7 @@ class NumericColumn():
     """
     return self.serie.median()
   
-  def get_histogram(self):
-    """
-    Return the generated histogram for selected column
-    """
+
   def get_histogram(self):
     """
     Return the generated histogram for selected column
@@ -85,8 +82,9 @@ class NumericColumn():
     #set theme
     sns.set_style("whitegrid")
     #create histogram
-    sns.histplot(data, x=self.serie, alpha=1, color = 'navy',  bins=50).set_title("Histogram")
-    st.pyplot(fig)
+    histogram = sns.histplot(data, x=self.serie, alpha=1, color = 'navy',  bins=50).set_title("Histogram")
+    return histogram
+     
   
   def get_frequent(self):
     """

@@ -37,7 +37,8 @@ class TestNumeric(unittest.TestCase):
 
             # init NumericColumn
             nc2 = NumericColumn()
-            nc2.col_name = "Last_Update"
+            nc2.col_name = "Lat"
+            nc2.serie = df["Lat"]
 
             # test methods
             print("Outputs using file",csv_path)
