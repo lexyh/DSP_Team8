@@ -170,7 +170,7 @@ if uploaded_file is not None:
             n += 1
             
             # display results
-            st.write(numeric_summary(nc))
+            #st.write(numeric_summary(nc))
             nc.get_histogram()
             nc.get_frequent()
             
