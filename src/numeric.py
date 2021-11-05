@@ -28,7 +28,7 @@ class NumericColumn():
     """
     Return number of missing values for selected column
     """
-    return (self.serie.isna()).sum()
+    return st.write(self.serie.isnull().sum())
 
   def get_zeros(self):
     """

@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import src.numeric as n
-
+import src.numeric from NumericColumn()
 
 # read csv
 csv_path = "01-01-2021.csv"
@@ -12,7 +12,7 @@ dc = n.NumericColumn()
 dc.col_name = "Last_Update"
 dc.serie = pd.to_numeric(df[dc.col_name], dayfirst=True)
 
-nc1 = NumericColumn()
+nc1 = n.NumericColumn()
 nc1.col_name = "test"
 nc1.serie = pd.Series([None,28.0339, -11.2027, -30, -45, 0, 34.90171875, 34.90171875, 30.86747479,0])
 
@@ -20,6 +20,9 @@ nc1.serie = pd.Series([None,28.0339, -11.2027, -30, -45, 0, 34.90171875, 34.9017
 df = pd.read_csv(csv_path)
 
 col = nc1
+nc1.get_missing()
+#print(nc1.get_missing())
+nc = NumericColumn()
 
 def numeric_summary(NumericColumn):
 
@@ -39,8 +42,9 @@ def numeric_summary(NumericColumn):
 
     return df
 
-nc = nm.NumericColumn()
-st.dataframe(numeric_summary(col))
+
+
+#st.dataframe(numeric_summary(col))
 
 
 
