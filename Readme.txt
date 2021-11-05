@@ -15,7 +15,6 @@ This app is built to allow a user to point to a data file , load that file and a
 3. select columns to change to datetime format
 4. display summary information such as: empty and null values, stastistical values for numeric columns, date summary for date columns and frequency of values for text columns.  
 
-
 Note: currently files suitable to read in are limited to files in comma delimited format.
 
 ## Available Commands
@@ -62,6 +61,24 @@ If you are using Pipenv, then you can run:
          ├── test_numeric.py    <- Python file that runs unit tests against the object defined in the numeric.py module.
          ├── test_text.py    <- Python file that runs unit tests against the object defined in the text.py module.
 
+
+
+## TO SET UP IN DOCKER ##
+Steps to set up and launch the program as a docker container are outlined below. 
+This should allow users to run the program from the command line.
+1. Download program files from the GitHub Repository https://github.com/lexyh/DSP_Team8.git  
+2. Save the application files to a location on your local computer. 
+3. download and install docker:
+    - desktop, or
+    - engine and compose separately
+4. Open command line prompt 
+5. In CMD type: cd the-application-path/DSP_Team8
+6. In CMD type: docker-compose up -d
+7. Open your web browser and navigate to: http://localhost: 8501 or localhost: 8501  
+
+## ALTERNATIVELY RUN FROM COMMAND LINE ##
+To run from command line instead: 
+Navigate to the program location via the command line and type: streamlit run streamlit_app.py
 
 Comments:
 HP 27/10/21
