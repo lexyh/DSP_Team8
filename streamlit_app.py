@@ -78,10 +78,10 @@ def text_summary(TextColumn):
     summary["Only (numeric) Digits"] = TextColumn.get_digit()
     
     #convert to dataframe to allow streamlit to display the dictionary
-    df = pd.DataFrame(pd.Series(summary).reset_index()) 
-    df.columns = ["Value Category", "Counts"]
+    df = pd.DataFrame(pd.Series(summary).reset_index())
+    dfs = df.columns = ["Value Category", "Counts"].style.hide_index()
 
-    return df
+    return dfs
 
 def mode_caption(md):
     """
@@ -161,7 +161,8 @@ if uploaded_file is not None:
             
             ### RETURN SPECIFIC RESULTS FOR COLUMN BEFORE WRITING ###
             subheader_text = (f'3.{t}. Field Name: {tc.col_name}') #subheading content
-            md = tc.get_mode() #return mode
+            md = tc.get_mode() #return mode (dataframe object)
+            mds = md.style.hide_index() #hide the index before printing
 
             ### WRITE RESULTS TO STREAMLIT ###
             st.subheader(subheader_text)
@@ -176,7 +177,7 @@ if uploaded_file is not None:
             if md is None:
                 st.write('No Mode Found')
             if md is not None:
-                st.write(md)
+                st.write(mds)
             st.caption(mode_caption(md))
 
             ## WRITE FREQUENCY TABLE & GRAPH ##
