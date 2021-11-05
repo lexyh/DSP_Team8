@@ -67,7 +67,7 @@ def text_summary(TextColumn):
 
     summary = {} #initialise empty dict
 
-    #write functions to dictionary
+    # write functions to dictionary
     summary["Missing Values"] = TextColumn.get_missing()
     summary["Whitespace Values"] = TextColumn.get_whitespace()
     summary["Unique Values"] = TextColumn.get_unique()
@@ -77,7 +77,7 @@ def text_summary(TextColumn):
     summary["Only Alphabet Characters"] = TextColumn.get_alphabet()
     summary["Only (numeric) Digits"] = TextColumn.get_digit()
     
-    #convert to dataframe to allow streamlit to display the dictionary
+    # convert to dataframe to allow streamlit to display the dictionary
     df = pd.DataFrame(pd.Series(summary).reset_index())
     df.columns = ["Value Category", "Counts"]
 
@@ -131,9 +131,9 @@ if uploaded_file is not None:
     
     # create counters for writing subheading
     # used to write the relevant subheading text to the app for each column loop
-    t = 0   #counter to track the text column instance it is, used to format the display subtitle
-    d = 0   #date
-    n = 0   #numeric
+    t = 1   #counter to track the text column instance it is, used to format the display subtitle
+    d = 1   #date
+    n = 1   #numeric
     
     # loop through each column in the Dataset and display the information for the corrosponding data type
     for column in ds.df:
@@ -146,33 +146,53 @@ if uploaded_file is not None:
             nc = nm.NumericColumn()
             nc.col_name = column
             nc.serie = ds.df[column]
-            ### fill in other display information with numeric.py functions ###
+            
+            # display heading and increment numbering
+            subheader_text = (f'1.{n}. Field Name: {nc.col_name}') #subheading content
+            st.subheader(subheader_text)
+            n += 1
+            
+            # display results
             nc.get_histogram()
             nc.get_frequent()
             
+        # for datetime columns
+        elif dtype == np.datetime64:
+            # initialise DateColumn object
+            dc = dt.DateColumn()
+            dc.col_name = column
+            dc.serie = ds.df[column]
+            
+            # display heading and increment numbering
+            subheader_text = (f'2.{d}. Field Name: {dc.col_name}') #subheading content
+            st.subheader(subheader_text)
+            d += 1
+            
+            # display results
+            st.bar_chart(dc.get_barchart())
+            st.dataframe(dc.get_frequent())  
+            
         # for text columns
         elif dtype == "object":
-            print("Running")
             # initialise TextColumn object
             tc = tx.TextColumn()
             tc.col_name = column
-            tc.serie = ds.df[column]
-            
-            ### display information with text.py functions ###
-            
-            ### RETURN SPECIFIC RESULTS FOR COLUMN BEFORE WRITING ###
+            tc.serie = ds.df[column]            
+       
+            # return specific results for column before writing
             subheader_text = (f'3.{t}. Field Name: {tc.col_name}') #subheading content
             md = tc.get_mode() #return mode (dataframe object)
             mds = md.style.hide_index() #hide the index before printing
 
-            ### WRITE RESULTS TO STREAMLIT ###
+            # write heading to streamlit and increment heading number
             st.subheader(subheader_text)
+            t += 1
             
-            ## WRITE SUMMARY ##
+            # write summary
             st.write("The characteristics of this column are shown below:")                  
             st.dataframe(text_summary(tc).assign(hack="").set_index("hack"))    # hack to remove the index numbers
 
-            ## WRITE MODE ##
+            # write mode
             st.write("The most frequent values in this column are: ")
             # Check mode and write values and calculated caption
             if md is None:
@@ -181,22 +201,10 @@ if uploaded_file is not None:
                 st.write(mds)
             st.caption(mode_caption(md))
 
-            ## WRITE FREQUENCY TABLE & GRAPH ##
+            # write frequency table & graph
             st.write('Frequency Table:')
             st.table(tc.get_frequent()) #style.highlight_max(axis=0)) #highlighting included but can be toggled off. 
             st.write('Frequency Graph:')
             st.write("The graph below plots the frequency of values in thhe column from most frequent to least frequent.")
             st.write("Hover over a bar to see specific details. Use the arrows to open the chart in a larger window.")
-            st.plotly_chart(tc.get_barchart())
-
-            ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
-
-        elif dtype == np.datetime64:
-            # initialise DateColumn object
-            dc = dt.DateColumn()
-            dc.col_name = column
-            dc.serie = ds.df[column]
-            print("Running")
-            ### fill in other display information with datetime.py functions ###
-            st.bar_chart(dc.get_barchart())
-            st.dataframe(dc.get_frequent())    
+            st.plotly_chart(tc.get_barchart())  
