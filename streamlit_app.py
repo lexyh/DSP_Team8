@@ -50,6 +50,8 @@ if uploaded_file is not None:
             nc.col_name = column
             nc.serie = ds.df[column]
             ### fill in other display information with numeric.py functions ###
+            nc.get_histogram()
+            nc.get_frequent()
             
         # for text columns
         elif dtype == "object":
