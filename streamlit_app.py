@@ -79,9 +79,9 @@ def text_summary(TextColumn):
     
     #convert to dataframe to allow streamlit to display the dictionary
     df = pd.DataFrame(pd.Series(summary).reset_index())
-    dfs = df.columns = ["Value Category", "Counts"].style.hide_index()
+    df.columns = ["Value Category", "Counts"]
 
-    return dfs
+    return df
 
 def mode_caption(md):
     """
@@ -152,6 +152,7 @@ if uploaded_file is not None:
             
         # for text columns
         elif dtype == "object":
+            print("Running")
             # initialise TextColumn object
             tc = tx.TextColumn()
             tc.col_name = column
@@ -169,7 +170,7 @@ if uploaded_file is not None:
             
             ## WRITE SUMMARY ##
             st.write("The characteristics of this column are shown below:")                  
-            st.dataframe(text_summary(tc))
+            st.dataframe(text_summary(tc).assign(hack="").set_index("hack"))    # hack to remove the index numbers
 
             ## WRITE MODE ##
             st.write("The most frequent values in this column are: ")
