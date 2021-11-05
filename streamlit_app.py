@@ -12,15 +12,12 @@ st.title("Data Explorer Tool")
 #uploaded_file = st.file_uploader("Choose a CSV file") #commented out as the file picker object returns a stream object. Not a file that can be automatically read in with pandas. 
 #looking at pd.read_csv(StringIO(stream_file)) but it's not working. 
 
-stream_file = st.file_uploader("Choose a CSV file")
-file_name = stream_file.name
+uploaded file = st.file_uploader("Choose a CSV file")
+file_name = uploaded_file.name
 st.write(f'Your file {file_name} was uploaded sucessfully.')
-#note: uploaded file is not a CSV object, it's a stream object. 
+df = pd.DataFrame()
 
-'''
-' NEED TO CONVERT STREAM FILE OBJECT TO A DATA FRAME'
-'''
-uploaded_file = "converted object"
+df = pd.read_csv(uploaded_file)
 
 def text_summary(TextColumn):
     """
