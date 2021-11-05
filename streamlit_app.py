@@ -12,6 +12,59 @@ st.title("Data Explorer Tool")
 uploaded_file = st.file_uploader("Choose a CSV file")
 
 
+def text_summary(TextColumn):
+    """
+    Pass text column methods to column to return value counts
+    Compile data into a pandas dataframe & return
+    
+    Expected parameter: TextColumn() 
+    Class: defined in text.py
+    """
+    
+    summary = {} #initialise empty dict
+    
+    #write functions to dictionary
+    summary["Missing Values"] = TextColumn.get_missing()
+    summary["Whitespace Values"] = TextColumn.get_whitespace()
+    summary["Unique Values"] = TextColumn.get_unique()
+    summary["Empty Values"] = TextColumn.get_empty()
+    summary["All Lowercase"] = TextColumn.get_lowercase()
+    summary["All Uppercase"] = TextColumn.get_uppercase()
+    summary["Only Alphabet Characters"] = TextColumn.get_alphabet()
+    summary["Only (numeric) Digits"] = TextColumn.get_digit()
+    #convert to dataframe to allow streamlit to display the dictionary
+    
+    df = pd.DataFrame(pd.Series(summary).reset_index()) 
+    df.columns = ["Value Category", "Counts"]
+    
+    return df
+
+def mode_caption(md):
+
+    """
+    Logic to compile a caption to present underneath the mode for the column.
+    Expected Input:
+     - md: list 
+     - md description: List derived from get_mode() funcions in defined in text.py, numeric.py, datetime.py
+    Output: 
+     - int: length of list object
+    """
+
+    if len(md) == 1:
+        caption_text = "Single mode found for this column."
+    if len(md) > 1 :
+        caption_text = "Note: Multiple values in this column are equally most frequent."
+        
+    return caption_text
+
+# create counters for writing subheading
+# used to write the relevamt subheading text to the app for each column loop
+
+t = 0 #counter for to track the text column instance it is, used to format the display subtitle
+d = 0
+n = 0
+
+
 if uploaded_file is not None:
     # initialise Dataset object - this includes all data in the CSV
     ds = da.Dataset()
@@ -42,53 +95,6 @@ if uploaded_file is not None:
     # get a dictionary of column data types
     dtype_dict = ds.get_cols_dtype()
     
-    # create counters for writing subheading
-    # used to write the relevamt subheading text to the app for each column loop
-
-    t = 0 #counter for to track the text column instance it is, used to format the display subtitle
-    d = 0
-    n = 0
-
-    def text_summary(TextColumn):
-            """
-            Pass text column methods to column to return value counts
-            Compile data into a pandas dataframe & return
-            
-            Expected parameter: TextColumn() 
-            Class: defined in text.py
-            """
-            
-            summary = {} #initialise empty dict
-            
-            #write functions to dictionary
-            summary["Missing Values"] = TextColumn.get_missing()
-            summary["Whitespace Values"] = TextColumn.get_whitespace()
-            summary["Unique Values"] = TextColumn.get_unique()
-            summary["Empty Values"] = TextColumn.get_empty()
-            summary["All Lowercase"] = TextColumn.get_lowercase()
-            summary["All Uppercase"] = TextColumn.get_uppercase()
-            summary["Only Alphabet Characters"] = TextColumn.get_alphabet()
-            summary["Only (numeric) Digits"] = TextColumn.get_digit()
-            #convert to dataframe to allow streamlit to display the dictionary
-            
-            df = pd.DataFrame(pd.Series(summary).reset_index()) 
-            df.columns = ["Value Category", "Counts"]
-            
-            return df
-
-    def mode_caption(md):
-
-            """
-            Logic to compile a caption to present underneath the mode for the column
-            """
-            if len(md) == 1:
-                caption_text = "Single mode found for this column."
-            if len(md) > 1 :
-                caption_text = "Note: Multiple values in this column are equally most frequent."
-                
-            return caption_text
-
-
     # loop through each column in the Dataset and display the information for the corrosponding data type
     for column in ds.df:
         # get the column data type
@@ -147,7 +153,7 @@ if uploaded_file is not None:
             st.text("Hover over a bar to see specific details. Use the arrows to open the chart in a larger window.")
             st.plotly_chart(tc.get_barchart())
 
-        ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
+            ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
 
 
         elif dtype == "datetime64":
