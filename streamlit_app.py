@@ -2,7 +2,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from io import StringIO
 import src.data as da
 import src.datetime as dt
 import src.numeric as nm
@@ -71,6 +70,23 @@ def numeric_summary(NumericColumn):
     summary["Median Value"] = NumericColumn.get_median()
 
     df = pd.DataFrame(pd.Series(summary).reset_index()) 
+    df.columns = ["Value Category", "Counts"]
+    
+    return df
+    
+def datetime_summary(DateColumn):
+
+    summary = {}    #initialise empty dict
+    
+    # write functions to dictionary
+    summary["Missing Values"] = DateColumn.get_missing()
+    summary["Unique Values"] = DateColumn.get_unique()
+    summary["Number of weekend dates"] = DateColumn.get_weekend()
+    summary["Number of weekday dates"] = DateColumn.get_weekday()
+    summary["Number of future dates"] = DateColumn.get_future()
+
+    df = pd.DataFrame(pd.Series(summary).reset_index()) 
+    df.columns = ["Value Category", "Counts"]
     
     return df
 
@@ -171,8 +187,9 @@ if uploaded_file is not None:
             n += 1
             
             # display results
-            st.write(numeric_summary(nc))
+            st.write(numeric_summary(nc).assign(hack="").set_index("hack"))    # hack to remove the index numbers
             nc.get_histogram()
+            st.write("Most Frequent Values")
             nc.get_frequent()
             
     # for datetime columns
@@ -184,7 +201,7 @@ if uploaded_file is not None:
             # initialise DateColumn object
             dc = dt.DateColumn()
             dc.col_name = column
-            dc.serie = ds.df[column]
+            dc.serie = pd.to_datetime(ds.df[column], dayfirst=True)
             
             # display heading and increment numbering
             subheader_text = (f'2.{d}. Field Name: {dc.col_name}') #subheading content
@@ -192,7 +209,14 @@ if uploaded_file is not None:
             d += 1
             
             # display results
+            st.write("The characteristics of this column are shown below:") 
+            st.write(datetime_summary(dc).assign(hack="").set_index("hack"))    # hack to remove the index numbers
+            st.write(f"Minimum value = {dc.get_min()}")
+            st.write(f"Maximum value = {dc.get_max()}")
+            
+            st.write('Frequency Graph:')
             st.bar_chart(dc.get_barchart())
+            st.write('Frequency Table:')
             st.dataframe(dc.get_frequent())  
             
     # for text columns
