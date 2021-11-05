@@ -85,10 +85,10 @@ def text_summary(TextColumn):
     summary["Only (numeric) Digits"] = TextColumn.get_digit()
     
     #convert to dataframe to allow streamlit to display the dictionary
-    df = pd.DataFrame(pd.Series(summary).reset_index()) 
-    df.columns = ["Value Category", "Counts"]
+    df = pd.DataFrame(pd.Series(summary).reset_index())
+    dfs = df.columns = ["Value Category", "Counts"].style.hide_index()
 
-    return df
+    return dfs
 
 def mode_caption(md):
     """
