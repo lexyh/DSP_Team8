@@ -64,6 +64,8 @@ n = 0
 
 
 if uploaded_file is not None:
+    st.write(f'Your file {uploaded_file} was uploaded sucessfully.')
+    
     # initialise Dataset object - this includes all data in the CSV
     ds = da.Dataset()
     ds.name = "my_dataset"
