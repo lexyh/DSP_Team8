@@ -1,6 +1,7 @@
 # To be filled by students
 import streamlit as st
 import pandas as pd
+
 import src.data as da
 import src.datetime as dt
 import src.numeric as nm
@@ -9,7 +10,16 @@ import src.text as tx
 
 st.title("Data Explorer Tool")
 # read data
-uploaded_file = st.file_uploader("Choose a CSV file")
+stream_file = st.file_uploader("Choose a CSV file")
+file_name = stream_file.name
+st.write(f'Your file {file_name} was uploaded sucessfully.')
+#note: uploaded file doesn't appear to be a CSV object, it's a stream object. 
+
+'''
+' NEED TO CONVERT STREAM FILE OBJECT TO A DATA FRAME'
+'''
+
+uploaded_file = "converted object"
 
 def text_summary(TextColumn):
     """
@@ -34,9 +44,10 @@ def text_summary(TextColumn):
     #convert to dataframe to allow streamlit to display the dictionary
     
     df = pd.DataFrame(pd.Series(summary).reset_index()) 
-    df.columns = ["Value Category", "Counts"]
+    dfs = df.columns = ["Value Category", "Counts"].style.hide_index()
     
-    return df
+    
+    return dfs
 
 def mode_caption(md):
 
@@ -65,7 +76,6 @@ n = 0
 
 
 if uploaded_file is not None:
-    st.write(f'Your file {uploaded_file} was uploaded sucessfully.')
     # initialise Dataset object - this includes all data in the CSV
     ds = da.Dataset()
     ds.name = "my_dataset"
@@ -125,6 +135,7 @@ if uploaded_file is not None:
             ### RETURN SPECIFIC RESULTS FOR COLUMN BEFORE WRITING ###
             subheader_text = (f'3.{t}. Field Name: {tc.col_name}') #subheading content
             md = tc.get_mode() #return mode
+            mds = md.style.hide_index() #hide the index before printing
 
             
             ### WRITE RESULTS TO STREAMLIT ###
@@ -141,7 +152,7 @@ if uploaded_file is not None:
             if md is None:
                 st.write('No Mode Found')
             if md is not None:
-                st.write(md)
+                st.write(mds)
             st.caption(mode_caption(md))
 
 

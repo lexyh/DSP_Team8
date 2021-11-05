@@ -62,6 +62,7 @@ class TextColumn:
     def get_alphabet(self):
         """
         Return number of rows with only alphabet characters for selected column
+        This excludes data points that contain whitespace. 
         """
         return self.serie.str.isalpha().sum()
 

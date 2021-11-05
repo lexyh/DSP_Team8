@@ -27,19 +27,19 @@ class TestTextColumn(unittest.TestCase):
         #test variables
         col_empty_input = TextColumn()
         col_empty_input.col_name = ""
-        col_empty_input.serie = pd.Series({})
+        col_empty_input.serie = pd.Series()
         col_test_unnamed = TextColumn()
         
         #Assignment as Expected where empty
         self.assertEqual(col_empty_input.col_name, "") #object created even where empty data input
-        self.assertEqual(col_empty_input.serie, {}) # series attribute created even when no values
+        self.assertTrue(col_empty_input.serie.empty) # series attribute created even when no values
         
     def test_functions(self):
             
             #instantiate
             col = TextColumn()
             #create test object
-            col.serie = pd.Series(['IT WOULD','BE SO GOOD','BE SO GOOD','BE SO GOOD','be so good','true','false',0.65,0.58,'n/a','howierlkn',765765876, '%^&^%&^','',345,None,None,98,'   ',13434645])
+            col.serie = pd.Series(['IT WOULD','BE SO GOOD','BE SO GOOD','BE SO GOOD','be so good','true','false',0.65,0.58,'n/a','howierlkn',765765876, '%^&^%&^','','345',None,None,'98','   ',13434645])
             col.col_name = "Column1"
             
             #expected values
@@ -48,11 +48,12 @@ class TestTextColumn(unittest.TestCase):
             n_missing = 2 #note: raw csv seems to read in "n/a" as null. But writing it directly returns a string value.
             n_empty = 1
             n_whitespace = 1
-            n_lowercase = 4
+            n_lowercase = 5
             n_uppercase = 4
-            n_alphabet = 8
-            n_digit = 4 #note only reads in full integers as numeric by the looks of it
-                            
+            n_alphabet = 3#returns wgere ONLY alpha characters. whitespace not included as alpha numeric
+            n_digit = 2 #note only reads in full integers as numeric by the looks of it
+                                     
+
             #logic checks
         
             self.assertEqual(col.get_name(), "Column1")
@@ -64,7 +65,7 @@ class TestTextColumn(unittest.TestCase):
             self.assertEqual(col.get_uppercase(), n_uppercase)
             self.assertEqual(col.get_alphabet(), n_alphabet)
             self.assertEqual(col.get_digit(), n_digit)
-            self.assertTrue(isinstance(col.get_mode), list) #returned mode should be a list object
+            self.assertTrue(col.get_mode() is not None) #returned mode is a dataframe styled object
             self.assertTrue(col.get_barchart() is not None)
             self.assertTrue(col.get_frequent() is not None)
             #get_frequent()
