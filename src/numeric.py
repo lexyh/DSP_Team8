@@ -8,9 +8,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 @dataclass
-class NumericColumn:
+class NumericColumn():
   col_name: str = None
   serie: pd.Series = None
+
 
   def get_name(self):
     """
