@@ -57,8 +57,9 @@ def dataset_output(file_name, ds):
 
 def numeric_summary(NumericColumn):
 
-    summary = {}
-
+    summary = {}    #initialise empty dict
+    
+    # write functions to dictionary
     summary["Missing Values"] = NumericColumn.get_missing()
     summary["Unique Values"] = NumericColumn.get_unique()
     summary["Number Rows with 0"] = NumericColumn.get_zeros()
@@ -70,7 +71,7 @@ def numeric_summary(NumericColumn):
     summary["Median Value"] = NumericColumn.get_median()
 
     df = pd.DataFrame(pd.Series(summary).reset_index()) 
-
+    
     return df
 
 def text_summary(TextColumn):
@@ -82,7 +83,7 @@ def text_summary(TextColumn):
     Class: defined in text.py
     """
 
-    summary = {} #initialise empty dict
+    summary = {}    #initialise empty dict
 
     # write functions to dictionary
     summary["Missing Values"] = TextColumn.get_missing()
@@ -170,7 +171,7 @@ if uploaded_file is not None:
             n += 1
             
             # display results
-            #st.write(numeric_summary(nc))
+            st.write(numeric_summary(nc))
             nc.get_histogram()
             nc.get_frequent()
             

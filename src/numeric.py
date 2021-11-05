@@ -40,7 +40,7 @@ class NumericColumn():
     """
     Return number of negative values for selected column
     """
-    return self.serie < 0
+    return (self.serie < 0).sum()
 
   def get_mean(self):
     """
