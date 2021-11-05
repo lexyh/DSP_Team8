@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import src.numeric as n
+from src.numeric import NumericColumn
 
 
 
@@ -12,17 +13,18 @@ df = pd.read_csv(csv_path)
 nc = n.NumericColumn()
 nc.col_name = "Lat"
 nc.serie = pd.to_numeric(df[nc.col_name])
-
-
+col = NumericColumn()
 
 # read csv
 df = pd.read_csv(csv_path)
 
 st.title("Numeric Test")
 
+
 def numeric_summary(NumericColumn):
 
     summary = {}
+
     summary["Missing Values"] = NumericColumn.get_missing()
     summary["Unique Values"] = NumericColumn.get_unique()
     summary["Number Rows with 0"] = NumericColumn.get_zeros()
@@ -37,6 +39,8 @@ def numeric_summary(NumericColumn):
     df.columns = ["Value Category", "Counts"]
 
     return df
+
+st.dataframe(numeric_summary(col))
 
 
 nc.get_histogram()
