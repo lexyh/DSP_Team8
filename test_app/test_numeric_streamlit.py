@@ -12,10 +12,15 @@ dc = n.NumericColumn()
 dc.col_name = "Last_Update"
 dc.serie = pd.to_numeric(df[dc.col_name], dayfirst=True)
 
+nc1 = NumericColumn()
+nc1.col_name = "test"
+nc1.serie = pd.Series([None,28.0339, -11.2027, -30, -45, 0, 34.90171875, 34.90171875, 30.86747479,0])
+
 # read csv
 df = pd.read_csv(csv_path)
 
-col = NumericColumn()
+col = nc1
+
 def numeric_summary(NumericColumn):
 
     summary = {}
@@ -31,11 +36,13 @@ def numeric_summary(NumericColumn):
     summary["Median Value"] = NumericColumn.get_median()
 
     df = pd.DataFrame(pd.Series(summary).reset_index()) 
-    df.columns = ["Value Category", "Counts"]
 
     return df
 
+nc = nm.NumericColumn()
 st.dataframe(numeric_summary(col))
+
+
 
 st.title("Numeric Test")
 
