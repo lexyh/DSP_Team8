@@ -12,7 +12,6 @@ class NumericColumn():
   col_name: str = None
   serie: pd.Series = None
 
-
   def get_name(self):
     """
     Return name of selected column
@@ -23,7 +22,7 @@ class NumericColumn():
     """
     Return number of unique values for selected column
     """
-    return self.serie.dropna().unique.size
+    return self.serie.nunique()
 
   def get_missing(self):
     """
@@ -41,7 +40,7 @@ class NumericColumn():
     """
     Return number of negative values for selected column
     """
-    return ((self.serie>=0).sum())
+    return self.serie < 0
 
   def get_mean(self):
     """

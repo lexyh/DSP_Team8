@@ -10,19 +10,21 @@ class TestNumeric(unittest.TestCase):
         # create series of data
         nc1 = NumericColumn()
         nc1.col_name = "test"
-        nc1.serie = pd.Series,([None,"28.0339", "-11.2027", "0", "34.90171875", "34.90171875", "30.86747479"])
+        nc1.serie = pd.Series([None,28.0339, -11.2027, -30, -45, 0, 34.90171875, 34.90171875, 30.86747479,0])
+
+        testdata = pd.Series([None,28.0339, -11.2027, -30, -45, 0, 34.90171875, 34.90171875, 30.86747479,0])
 
         # test methods
         self.assertEqual(nc1.get_name(),"test")
-        self.assertEqual(nc1.get_unique(),7)
+        self.assertEqual(nc1.get_unique(),testdata.nunique())
         self.assertEqual(nc1.get_missing(),1)
-        self.assertEqual(nc1.get_zeros(),7)
-        self.assertEqual(nc1.get_negatives(),1)
-        self.assertEqual(nc1.get_mean(),1)
-        self.assertEqual(nc1.get_std(),1)
-        self.assertEqual(nc1.get_min(),1)
-        self.assertEqual(nc1.get_max(),1)
-        self.assertEqual(nc1.get_median(),1)
+        self.assertEqual(nc1.get_zeros(),2)
+        self.assertEqual(nc1.get_negatives(),3)
+        self.assertEqual(nc1.get_mean(),testdata.mean())
+        self.assertEqual(nc1.get_std(),testdata.std())
+        self.assertEqual(nc1.get_min(),testdata.min())
+        self.assertEqual(nc1.get_max(),testdata.max())
+        self.assertEqual(nc1.get_median(),testdata.median())
         self.assertTrue(nc1.get_histogram() is not None)
         self.assertTrue(nc1.get_frequent() is not None)
         
