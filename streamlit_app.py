@@ -149,8 +149,8 @@ if uploaded_file is not None:
             st.write('Frequency Table:')
             st.table(tc.get_frequent()) #style.highlight_max(axis=0)) #highlighting included but can be toggled off. 
             st.write('Frequency Graph:')
-            st.text("The graph below plots the frequency of values in thhe column from most frequent to least frequent.")
-            st.text("Hover over a bar to see specific details. Use the arrows to open the chart in a larger window.")
+            st.write("The graph below plots the frequency of values in thhe column from most frequent to least frequent.")
+            st.write("Hover over a bar to see specific details. Use the arrows to open the chart in a larger window.")
             st.plotly_chart(tc.get_barchart())
 
             ## END OF TEXTCOLUMN STREAMLIT OUTPUT ##
