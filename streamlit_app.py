@@ -21,8 +21,7 @@ def dataset_output(file_name, ds):
     st.write("Number of Rows: " + rows)
     
     # store Count number of columns and then write in streamlit the number of columns
-    cols = ds.get_n_cols() 
-    # Needs to be finished    
+    cols = ds.get_n_cols()    
     st.write("Number of Columns: " + cols) 
     
     # write number of duplicate rows in streamlit
@@ -56,6 +55,24 @@ def dataset_output(file_name, ds):
     st.subheader("Random Sample Rows of Table")
     st.dataframe(ds.get_sample(number))
 
+def numeric_summary(NumericColumn):
+
+    summary = {}
+
+    summary["Missing Values"] = NumericColumn.get_missing()
+    summary["Unique Values"] = NumericColumn.get_unique()
+    summary["Number Rows with 0"] = NumericColumn.get_zeros()
+    summary["Number of Rows with Negative Values"] = NumericColumn.get_negatives()
+    summary["Average Value"] = NumericColumn.get_mean()
+    summary["Standard Deviation Value"] = NumericColumn.get_std()
+    summary["Minimum Value"] = NumericColumn.get_min()
+    summary["Maximum Value"] = NumericColumn.get_max()
+    summary["Median Value"] = NumericColumn.get_median()
+
+    df = pd.DataFrame(pd.Series(summary).reset_index()) 
+
+    return df
+
 def text_summary(TextColumn):
     """
     Pass text column methods to column to return value counts
@@ -80,24 +97,6 @@ def text_summary(TextColumn):
     # convert to dataframe to allow streamlit to display the dictionary
     df = pd.DataFrame(pd.Series(summary).reset_index())
     df.columns = ["Value Category", "Counts"]
-
-    return df
-
-def numeric_summary(NumericColumn):
-
-    summary = {}
-
-    summary["Missing Values"] = NumericColumn.get_missing()
-    summary["Unique Values"] = NumericColumn.get_unique()
-    summary["Number Rows with 0"] = NumericColumn.get_zeros()
-    summary["Number of Rows with Negative Values"] = NumericColumn.get_negatives()
-    summary["Average Value"] = NumericColumn.get_mean()
-    summary["Standard Deviation Value"] = NumericColumn.get_std()
-    summary["Minimum Value"] = NumericColumn.get_min()
-    summary["Maximum Value"] = NumericColumn.get_max()
-    summary["Median Value"] = NumericColumn.get_median()
-
-    df = pd.DataFrame(pd.Series(summary).reset_index()) 
 
     return df
 
@@ -154,11 +153,11 @@ if uploaded_file is not None:
     n = 1   #numeric
     
     # loop through each column in the Dataset and display the information for the corrosponding data type
+    # for numeric columns
     for column in ds.df:
         # get the column data type
         dtype = dtype_dict[column]
         
-        # for numeric columns
         if dtype == np.int64 or dtype == np.float64:
             # initialise NumericColumn object
             nc = nm.NumericColumn()
@@ -169,14 +168,18 @@ if uploaded_file is not None:
             subheader_text = (f'1.{n}. Field Name: {nc.col_name}') #subheading content
             st.subheader(subheader_text)
             n += 1
-            st.write(numeric_summary(nc))
             
             # display results
+            st.write(numeric_summary(nc))
             nc.get_histogram()
             nc.get_frequent()
             
-        # for datetime columns
-        elif dtype == np.datetime64:
+    # for datetime columns
+    for column in ds.df:
+        # get the column data type
+        dtype = dtype_dict[column]    
+        
+        if dtype == np.datetime64:
             # initialise DateColumn object
             dc = dt.DateColumn()
             dc.col_name = column
@@ -191,8 +194,12 @@ if uploaded_file is not None:
             st.bar_chart(dc.get_barchart())
             st.dataframe(dc.get_frequent())  
             
-        # for text columns
-        elif dtype == "object":
+    # for text columns
+    for column in ds.df:
+        # get the column data type
+        dtype = dtype_dict[column]
+        
+        if dtype == "object":
             # initialise TextColumn object
             tc = tx.TextColumn()
             tc.col_name = column
